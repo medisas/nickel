@@ -50,6 +50,11 @@ module Nickel
       constructs.each do |c|
         # create a range between comp_start and comp_end, iterate through it and wipe out words between them
         (c.comp_start..c.comp_end).each { |x| message_array[x] = nil }
+        if c.is_a? PhoneNumberConstruct
+          message_array[c.comp_start] = "(#{c.send(:area_code)}) #{c.send(:central_office_code)}-#{c.send(:line_number)}"
+          next
+        end
+
         # also wipe out words before comp start if it is something like in, at, on, or the
         if c.comp_start - 1 >= 0 && message_array[c.comp_start - 1] =~ /\b(from|in|at|on|the|are|is|for)\b/
           message_array[c.comp_start - 1] = nil
@@ -67,6 +72,7 @@ module Nickel
       # reloop and wipe out words after end of constructs, if they are followed by another construct
       # note we already wiped out terms ahead of the constructs, so be sure to check for nil values, these indicate that a construct is followed by the nil
       constructs.each_with_index do |c, i|
+        next if c.is_a? PhoneNumberConstruct
         if message_array[c.comp_end + 1] && message_array[c.comp_end + 1] == 'and'    # do something tomorrow and on friday
           if message_array[c.comp_end + 2].nil? || (constructs[i + 1] && constructs[i + 1].comp_start == c.comp_end + 2)
             message_array[c.comp_end + 1] = nil

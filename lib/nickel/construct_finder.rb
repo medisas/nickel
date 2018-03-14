@@ -22,6 +22,9 @@ module Nickel
     end
 
     def reset_instance_vars
+      @area_code = nil
+      @central_office_code = nil
+      @line_number = nil
       @day_index = nil
       @month_index = nil
       @week_num = nil
@@ -292,6 +295,8 @@ module Nickel
         else
           found_date                                    # 5th
         end
+      elsif match_phone_number
+        found_phone_number
       end
     end # end def big_if_on_current_word
 
@@ -371,6 +376,15 @@ module Nickel
 
     def found_every_3rd_day
       @constructs << RecurrenceConstruct.new(repeats: :threedaily, comp_start: @pos, comp_end: @pos += 2, found_in: __method__)
+    end
+
+    def match_phone_number
+      !@components[@pos].match(/\(?([\d]{3})\)?[\^]?([\d]{3})[\^]?([\d]{4})/).nil?
+    end
+
+    def found_phone_number
+      area_code, central_office_code, line_number = @components[@pos].split('^')
+      @constructs << PhoneNumberConstruct.new(area_code: area_code, central_office_code: central_office_code, line_number: line_number, comp_start: @pos, comp_end: @pos += 1, found_in: __method__)
     end
 
     def match_repeats

@@ -10,6 +10,38 @@ describe Nickel do
     let(:n) { Nickel.parse(query, run_date) }
     let(:run_date) { Time.now }
 
+    context "when the query is a phone number" do
+      [
+        '(415)123-4567',
+        '415-123-4567',
+        '4151234567',
+        '+14151234567',
+        '1-415-123-4567',
+        '(415)1234567',
+        '1(415)1234567',
+        '415 123 4567',
+      ].each do |phone_number|
+        let(:query) { "Call mother at #{phone_number}" }
+
+        describe '#message' do
+          it "is 'Call patient's mother at #{phone_number}'" do
+            expect(n.message).to eql "Call mother at (415) 123-4567"
+          end
+        end
+
+        describe '#constructs' do
+          it 'is (415) 123-4567' do
+            constructs = n.construct_finder.constructs
+            phone_number_construct = constructs.first
+            expect(constructs.count).to eql 1
+            expect(phone_number_construct.area_code).to eql '415'
+            expect(phone_number_construct.central_office_code).to eql '123'
+            expect(phone_number_construct.line_number).to eql '4567'
+          end
+        end
+      end
+    end
+
     context "when the query is 'oct 15 09'" do
       let(:query) { 'oct 15 09' }
 

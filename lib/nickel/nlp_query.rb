@@ -22,6 +22,7 @@ module Nickel
     def query_formatting
       query_str.gsub!(/\n/, '')
       query_str.downcase!
+      replace_phone_numbers
       remove_unused_punctuation
       replace_backslashes
       run_spell_check
@@ -78,6 +79,10 @@ module Nickel
 
     def replace_backslashes
       nsub!(/\\/, '/')
+    end
+
+    def replace_phone_numbers
+      nsub!(/\d?[-.● ]?\(?([0-9]{3})\)?[-.● ]?([0-9]{3})[-.● ]?([0-9]{4})/, ' \1^\2^\3')
     end
 
     def run_spell_check

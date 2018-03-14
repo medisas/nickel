@@ -20,6 +20,10 @@ module Nickel
     attr_accessor :start_date, :end_date
   end
 
+  class PhoneNumberConstruct < Construct
+    attr_accessor :area_code, :central_office_code, :line_number
+  end
+
   class TimeConstruct < Construct
     attr_accessor :time
     def interpret
