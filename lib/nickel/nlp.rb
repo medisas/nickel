@@ -51,7 +51,11 @@ module Nickel
         # create a range between comp_start and comp_end, iterate through it and wipe out words between them
         (c.comp_start..c.comp_end).each { |x| message_array[x] = nil }
         if c.is_a? PhoneNumberConstruct
-          message_array[c.comp_start] = "(#{c.send(:area_code)}) #{c.send(:central_office_code)}-#{c.send(:line_number)}"
+          if c.area_code.nil? || c.area_code.empty?
+            message_array[c.comp_start] = "#{c.central_office_code}-#{c.line_number}"
+          else
+            message_array[c.comp_start] = "(#{c.area_code}) #{c.central_office_code}-#{c.line_number}"
+          end
           next
         end
 

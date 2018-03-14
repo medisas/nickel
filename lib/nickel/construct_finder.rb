@@ -379,7 +379,7 @@ module Nickel
     end
 
     def match_phone_number
-      !@components[@pos].match(/\(?([\d]{3})\)?[\^]?([\d]{3})[\^]?([\d]{4})/).nil?
+      !@components[@pos].match(/\(?([\d]{3})?\)?[\^]?([\d]{3})[\^]?([\d]{4})/).nil?
     end
 
     def found_phone_number
