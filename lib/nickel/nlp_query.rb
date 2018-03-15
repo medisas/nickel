@@ -82,7 +82,7 @@ module Nickel
     end
 
     def replace_phone_numbers
-      nsub!(/\d?[-.● ]?\(?([0-9]{3})?\)?[-.● ]?([0-9]{3})[-.● ]?([0-9]{4})/, ' \1^\2^\3')
+      nsub!(/\+?\d?[-.● ]?\(?(\d{3})?\)?[-.● ]?(\d{3})[-.● ]?(\d{4})\b/, ' \1^\2^\3')
     end
 
     def run_spell_check

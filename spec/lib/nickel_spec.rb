@@ -12,6 +12,7 @@ describe Nickel do
 
     context "when the query is a phone number" do
       [
+        '14151234567',
         '(415)123-4567',
         '415-123-4567',
         '4151234567',
@@ -21,22 +22,24 @@ describe Nickel do
         '1(415)1234567',
         '415 123 4567',
       ].each do |phone_number|
-        let(:query) { "Call mother at #{phone_number}" }
+        context "when the phone number is #{phone_number}" do
+          let(:query) { "Call mother at #{phone_number}" }
 
-        describe '#message' do
-          it "is 'Call patient's mother at #{phone_number}'" do
-            expect(n.message).to eql "Call mother at (415) 123-4567"
+          describe '#message' do
+            it "is 'Call patient's mother at #{phone_number}'" do
+              expect(n.message).to eql "Call mother at (415) 123-4567"
+            end
           end
-        end
 
-        describe '#constructs' do
-          it 'is (415) 123-4567' do
-            constructs = n.construct_finder.constructs
-            phone_number_construct = constructs.first
-            expect(constructs.count).to eql 1
-            expect(phone_number_construct.area_code).to eql '415'
-            expect(phone_number_construct.central_office_code).to eql '123'
-            expect(phone_number_construct.line_number).to eql '4567'
+          describe '#constructs' do
+            it 'is (415) 123-4567' do
+              constructs = n.construct_finder.constructs
+              phone_number_construct = constructs.first
+              expect(constructs.count).to eql 1
+              expect(phone_number_construct.area_code).to eql '415'
+              expect(phone_number_construct.central_office_code).to eql '123'
+              expect(phone_number_construct.line_number).to eql '4567'
+            end
           end
         end
       end
