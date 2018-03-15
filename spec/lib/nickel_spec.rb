@@ -43,27 +43,6 @@ describe Nickel do
 
     end
 
-    context "when the query is a phone number without an area code" do
-      let(:query) { "Call mother at 123-4567" }
-
-      describe '#message' do
-        it "is 'Call patient's mother at 123-4567'" do
-          expect(n.message).to eql "Call mother at 123-4567"
-        end
-      end
-
-      describe '#constructs' do
-        it 'is 123-4567' do
-          constructs = n.construct_finder.constructs
-          phone_number_construct = constructs.first
-          expect(constructs.count).to eql 1
-          expect(phone_number_construct.area_code).to eql ""
-          expect(phone_number_construct.central_office_code).to eql '123'
-          expect(phone_number_construct.line_number).to eql '4567'
-        end
-      end
-    end
-
     context "when the query is 'oct 15 09'" do
       let(:query) { 'oct 15 09' }
 

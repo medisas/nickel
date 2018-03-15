@@ -22,6 +22,11 @@ module Nickel
 
   class PhoneNumberConstruct < Construct
     attr_accessor :area_code, :central_office_code, :line_number
+
+    def phone_number
+      return if area_code && area_code.empty? && central_office_code && central_office_code.empty? && line_number && line_number.empty?
+      return "(#{area_code}) #{central_office_code}-#{line_number}"
+    end
   end
 
   class TimeConstruct < Construct
